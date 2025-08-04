@@ -820,24 +820,29 @@
 
         // Load upcoming events from Legistar
         async function fetchLegistarEvents() {
+            const list = document.getElementById('events-list');
+            if (!list) return;
+
             try {
-                const res = await fetch('https://webapi.legistar.com/v1/nashville/Events?$top=5');
-                if (!res.ok) throw new Error(res.statusText);
+                const res = await fetch('https://webapi.legistar.com/v1/nashville/Events?$top=20&$orderby=EventDate');
                 const events = await res.json();
-                const list = document.getElementById('events-list');
-                if (list) {
-                    events.forEach(ev => {
-                        const item = document.createElement('li');
-                        const date = new Date(ev.EventDate).toLocaleDateString();
-                        item.textContent = `${ev.EventBodyName} - ${date}`;
-                        list.appendChild(item);
-                    });
+                const upcoming = events
+                    .filter(ev => new Date(ev.EventDate) >= new Date())
+                    .slice(0, 5);
+
+                if (upcoming.length === 0) {
+                    list.innerHTML = '<li>No upcoming events found.</li>';
+                    return;
                 }
+
+                upcoming.forEach(ev => {
+                    const item = document.createElement('li');
+                    const date = new Date(ev.EventDate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+                    item.textContent = `${date} — ${ev.EventBodyName}`;
+                    list.appendChild(item);
+                });
             } catch (err) {
-                const list = document.getElementById('events-list');
-                if (list) {
-                    list.innerHTML = '<li>Unable to load events.</li>';
-                }
+                list.innerHTML = '<li class="error">Unable to load events.</li>';
                 console.error('Error fetching events:', err);
             }
         }

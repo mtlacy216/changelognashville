@@ -13,4 +13,5 @@ Open `index.html` in a browser to preview the site.
 
 ## Data example
 
-The landing page includes a small script that fetches upcoming Metro Council events from the [Legistar Web API](https://webapi.legistar.com/v1/nashville/Events) and lists them beneath the theme filters.
+The landing page includes a script that calls the [Legistar Web API](https://webapi.legistar.com/v1/nashville/Events) to pull upcoming Metro Council events.
+The request and DOM update happen in `assets/js/main.js`, which populates the list beneath the theme filters.

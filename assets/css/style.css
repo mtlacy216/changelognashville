@@ -949,6 +949,7 @@
         /* Events list styles */
         #events-section {
             text-align: left;
+            margin-top: 2rem;
         }
 
         .events-list {
@@ -960,4 +961,9 @@
         .events-list li {
             margin-bottom: 0.5rem;
             color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .events-list li.error {
+            color: var(--type-news);
         }
