@@ -820,34 +820,44 @@
 
 
         async function fetchLegistarEvents() {
-            const list = document.getElementById('events-list');
-            if (!list) return;
+  const list = document.getElementById('events-list');
+  if (!list) return;
 
-            try {
-                // Use a simple CORS proxy so the Legistar API can be accessed from the browser
-                const url = 'https://cors.isomorphic-git.org/https://webapi.legistar.com/v1/nashville/Events?$top=20&$orderby=EventDate';
-                const res = await fetch(url);
-                if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-                const events = await res.json();
-                const upcoming = events
-                    .filter(ev => new Date(ev.EventDate) >= new Date())
-                    .slice(0, 5);
+  const base = 'https://webapi.legistar.com/v1/nashville/Events?$top=20&$orderby=EventDate';
+  const sources = [
+    base,
+    `https://cors.isomorphic-git.org/${base}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(base)}`
+  ];
 
-                if (upcoming.length === 0) {
-                    list.innerHTML = '<li>No upcoming events found.</li>';
-                    return;
-                }
+  for (const url of sources) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const events = await res.json();
+      const upcoming = events
+        .filter(ev => new Date(ev.EventDate) >= new Date())
+        .slice(0, 6);
 
-                upcoming.forEach(ev => {
-                    const item = document.createElement('li');
-                    const date = new Date(ev.EventDate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
-                    item.textContent = `${date} — ${ev.EventBodyName}`;
-                    list.appendChild(item);
-                });
-            } catch (err) {
-                list.innerHTML = '<li class="error">Unable to load events.</li>';
-                console.error('Error fetching events:', err);
-            }
-        }
+      if (upcoming.length === 0) {
+        list.innerHTML = '<li>No upcoming events found.</li>';
+        return;
+      }
 
-        fetchLegistarEvents();
+      list.innerHTML = '';
+      upcoming.forEach(ev => {
+        const item = document.createElement('li');
+        const date = new Date(ev.EventDate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+        item.textContent = `${date} — ${ev.EventBodyName}`;
+        list.appendChild(item);
+      });
+      return; // Successfully loaded events
+    } catch (err) {
+      console.warn('Failed to fetch events from', url, err);
+    }
+  }
+
+  list.innerHTML = '<li class="error">Unable to load events.</li>';
+}
+
+fetchLegistarEvents();
