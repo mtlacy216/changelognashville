@@ -10,3 +10,4 @@ This repository hosts a static prototype for **Change Log // Nashville**.
 - `prototypes/` – earlier HTML experiments kept for reference.
 
 Open `index.html` in a browser to preview the site.
+
