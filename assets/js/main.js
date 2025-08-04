@@ -818,7 +818,7 @@
             }
         });
 
-        // Load upcoming events from Legistar
+
         async function fetchLegistarEvents() {
             const list = document.getElementById('events-list');
             if (!list) return;
