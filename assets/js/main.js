@@ -823,7 +823,7 @@
             const list = document.getElementById('events-list');
             if (!list) return;
 
-            const base = 'https://webapi.legistar.com/v1/nashville/Events?%24top=20&%24orderby=EventDate';
+            const base = 'https://webapi.legistar.com/v1/nashville/Events?$top=20&$orderby=EventDate';
             const sources = [
                 base,
                 `https://cors.isomorphic-git.org/${base}`,
