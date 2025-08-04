@@ -837,13 +837,14 @@
                     const events = await res.json();
                     const upcoming = events
                         .filter(ev => new Date(ev.EventDate) >= new Date())
-                        .slice(0, 5);
+                        .slice(0, 6);
 
                     if (upcoming.length === 0) {
                         list.innerHTML = '<li>No upcoming events found.</li>';
                         return;
                     }
 
+                    list.innerHTML = '';
                     upcoming.forEach(ev => {
                         const item = document.createElement('li');
                         const date = new Date(ev.EventDate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
