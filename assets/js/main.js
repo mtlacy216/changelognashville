@@ -824,7 +824,10 @@
             if (!list) return;
 
             try {
-                const res = await fetch('https://webapi.legistar.com/v1/nashville/Events?$top=20&$orderby=EventDate');
+                // Use a simple CORS proxy so the Legistar API can be accessed from the browser
+                const url = 'https://cors.isomorphic-git.org/https://webapi.legistar.com/v1/nashville/Events?$top=20&$orderby=EventDate';
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`Request failed: ${res.status}`);
                 const events = await res.json();
                 const upcoming = events
                     .filter(ev => new Date(ev.EventDate) >= new Date())
