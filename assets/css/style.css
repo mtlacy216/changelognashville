@@ -945,25 +945,3 @@
             min-height: calc(100vh - 200px);
             padding-bottom: 4rem;
         }
-
-        /* Events list styles */
-        #events-section {
-            text-align: left;
-            margin-top: 2rem;
-        }
-
-        .events-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 1rem;
-        }
-
-        .events-list li {
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .events-list li.error {
-            color: var(--type-news);
-        }
