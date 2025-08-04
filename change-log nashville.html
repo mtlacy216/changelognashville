@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Change Log // Nashville — Documenting Civic Changes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --paper:#fbfbfb;--ink:#161616;--audit:#e5e7eb;--flag:#ef4444;--warn:#fbbf24;--accent:#2563eb;--mint:#10b981; }
+    body{background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;}
+    .font-mono{font-family:'JetBrains Mono',monospace;}
+    .stamp{font-family:'JetBrains Mono',monospace;letter-spacing:.5px;background:var(--flag);color:#fff;padding:2px 8px;border-radius:4px;font-size:.7rem;user-select:none;box-shadow:0 2px 6px rgba(239,68,68,.25)}
+    .diff-code{counter-reset:line;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.65;white-space:pre-wrap;}
+    .diff-code span{display:block;padding-left:4rem;position:relative;border-left:3px solid transparent;}
+    .diff-code span::before{counter-increment:line;content:counter(line);position:absolute;left:0;width:3rem;text-align:right;color:rgba(255,255,255,.35);} 
+    .diff-del{background:rgba(239,68,68,.15);border-color:var(--flag);color:#fecaca;}
+    .diff-add{background:rgba(16,185,129,.18);border-color:var(--mint);color:#bbf7d0;}
+    .diff-code strong{font-weight:700;text-decoration:underline;}
+    .diff-code em{font-style:italic;text-decoration:underline;}
+    .scanlines::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(180deg,transparent 0 2px,rgba(0,0,0,.04) 2px 4px);pointer-events:none}
+    .title-hover:hover{color:var(--accent);transition:color 0.3s ease;}
+    
+    /* RSS Feed Styles - NYT Inspired */
+    .recent-posts {
+      background: linear-gradient(to bottom, #ffffff, #fafafa);
+      border-top: 1px solid var(--audit);
+      border-bottom: 1px solid var(--audit);
+      .modal-btn, .modal-close {
+        width: 2rem;
+        height: 2rem;
+        padding: 0.25rem;
+      }
+      
+      .load-more-button {
+        font-size: 0.8125rem;
+        padding: 0.625rem 1.5rem;
+      }
+    }
+    
+    /* Featured Post */
+    .featured-post {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      background: white;
+      border: 1px solid var(--audit);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .featured-post:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+    
+    .featured-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .featured-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .featured-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+      color: var(--ink);
+    }
+    
+    .featured-excerpt {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #4b5563;
+      margin-bottom: 1rem;
+    }
+    
+    .featured-meta {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    .featured-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    }
+    
+    .featured-image.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 3rem;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    /* Posts Grid */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      grid-auto-flow: dense;
+    }
+    
+    @media (min-width: 1024px) {
+      .posts-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .post-card {
+      background: white;
+      border: 1px solid var(--audit);
+      border-radius: 8px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      animation: fadeInUp 0.5s ease backwards;
+    }
+    
+    .post-card:nth-child(1) { animation-delay: 0.1s; }
+    .post-card:nth-child(2) { animation-delay: 0.15s; }
+    .post-card:nth-child(3) { animation-delay: 0.2s; }
+    .post-card:nth-child(4) { animation-delay: 0.25s; }
+    .post-card:nth-child(5) { animation-delay: 0.3s; }
+    .post-card:nth-child(6) { animation-delay: 0.35s; }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .post-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+    
+    .post-card.large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    
+    .post-card.tall {
+      grid-row: span 2;
+    }
+    
+    .post-card.with-image {
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    .post-card-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      display: block;
+    }
+    
+    .post-card-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .post-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .post-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    
+    .post-tag:nth-child(1) {
+      color: var(--accent);
+      background: rgba(37, 99, 235, 0.08);
+    }
+    
+    .post-tag:nth-child(2) {
+      color: var(--mint);
+      background: rgba(16, 185, 129, 0.08);
+    }
+    
+    .post-tag:nth-child(3) {
+      color: var(--warn);
+      background: rgba(251, 191, 36, 0.08);
+    }
+    
+    .post-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+      color: var(--ink);
+      flex: 1;
+    }
+    
+    .post-excerpt {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .post-meta {
+      font-size: 0.8125rem;
+      color: #9ca3af;
+      margin-top: auto;
+    }
+    
+    /* Source Badge */
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 0.5rem;
+    }
+    
+    .source-badge.substack {
+      color: #f97316;
+      background: rgba(249, 115, 22, 0.1);
+    }
+    
+    .source-badge.airtable {
+      color: #8b5cf6;
+      background: rgba(139, 92, 246, 0.1);
+    }
+    
+    /* Load More Button */
+    .load-more-button {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.75rem 2rem;
+      background: white;
+      border: 1px solid var(--audit);
+      border-radius: 8px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    .load-more-button:hover {
+      background: #f9fafb;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .load-more-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .load-more-button.loading {
+      color: transparent;
+    }
+    
+    .load-more-button.loading::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      margin: auto;
+      border: 2px solid transparent;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s ease infinite;
+    }
+    
+    /* Modal Enhancements */
+    .modal-controls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .modal-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      margin: -0.5rem 0 -0.5rem 0.5rem;
+      border-radius: 6px;
+      color: #6b7280;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+    
+    .modal-btn:hover {
+      background: rgba(0,0,0,0.05);
+      color: var(--ink);
+    }
+    
+    .modal.fullscreen {
+      width: 100vw;
+      max-width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      margin: 0;
+      border-radius: 0;
+    }
+    
+    .modal.fullscreen .modal-content {
+      max-height: calc(100vh - 120px);
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .featured-post {
+        grid-template-columns: 1fr;
+      }
+      
+      .posts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .post-card.large {
+        grid-column: span 2;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .featured-post {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+      }
+      
+      .featured-title {
+        font-size: 1.5rem;
+      }
+      
+      .featured-image {
+        height: 200px;
+      }
+      
+      .posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .post-card.large,
+      .post-card.tall {
+        grid-column: span 1;
+        grid-row: span 1;
+      }
+      
+      .post-card-image {
+        height: 140px;
+      }
+    }
+    
+    .refresh-button {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8125rem;
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: 1px solid var(--audit);
+      border-radius: 6px;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .refresh-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(37, 99, 235, 0.05);
+    }
+    
+    /* Loading State */
+    .loading-state {
+      padding: 3rem;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    /* Error State */
+    .error-state {
+      padding: 2rem;
+      text-align: center;
+      background: rgba(239, 68, 68, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    .error-state p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--flag);
+      margin-bottom: 0.5rem;
+    }
+    
+    .error-state small {
+      color: #6b7280;
+      font-size: 0.8125rem;
+    }
+    
+    /* Modal Styles - Clean & Modern */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: auto;
+      padding: 2rem 1rem;
+      z-index: 9999;
+      animation: fadeIn 0.2s ease;
+    }
+    
+    .modal {
+      background: white;
+      width: 100%;
+      max-width: 800px;
+      max-height: 90vh;
+      margin: auto;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      animation: slideIn 0.3s ease;
+      overflow: hidden;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideIn {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--audit);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      background: #fafafa;
+    }
+    
+    .modal-title {
+      margin: 0;
+      font-size: 1.125rem;
+      line-height: 1.5;
+      flex: 1 1 auto;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      margin: -0.5rem -0.5rem -0.5rem 0.5rem;
+      border-radius: 6px;
+      color: #6b7280;
+      transition: all 0.2s ease;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-close:hover {
+      background: rgba(0,0,0,0.05);
+      color: var(--ink);
+    }
+    
+    .modal-content {
+      overflow-y: auto;
+      flex: 1 1 auto;
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--audit);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafafa;
+      font-size: 0.875rem;
+    }
+    
+    .modal-meta {
+      color: #6b7280;
+    }
+    
+    .modal-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .modal-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* Article Styles */
+    .article-content {
+      padding: 2rem;
+      max-width: 65ch;
+      margin: 0 auto;
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+    
+    .article-content h1, 
+    .article-content h2, 
+    .article-content h3, 
+    .article-content h4 {
+      margin-top: 2em;
+      margin-bottom: 0.5em;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    
+    .article-content h1 { font-size: 1.875rem; }
+    .article-content h2 { font-size: 1.5rem; }
+    .article-content h3 { font-size: 1.25rem; }
+    
+    .article-content p {
+      margin: 1.25em 0;
+    }
+    
+    .article-content a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    
+    .article-content blockquote {
+      margin: 1.5em 0;
+      padding: 0 0 0 1.5em;
+      border-left: 3px solid var(--audit);
+      font-style: italic;
+      color: #4b5563;
+    }
+    
+    .article-content ul, 
+    .article-content ol {
+      padding-left: 1.5em;
+      margin: 1.25em 0;
+    }
+    
+    .article-content li {
+      margin-bottom: 0.5em;
+    }
+    
+    .article-content img {
+      max-width: 100%;
+      height: auto;
+      margin: 2em auto;
+      display: block;
+      border-radius: 8px;
+    }
+    
+    .article-content code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875em;
+      background: rgba(0,0,0,0.05);
+      padding: 0.125em 0.375em;
+      border-radius: 3px;
+    }
+    
+    .article-content pre {
+      background: #f6f8fa;
+      border-radius: 6px;
+      padding: 1em;
+      overflow-x: auto;
+      margin: 1.5em 0;
+    }
+    
+    .article-content pre code {
+      background: none;
+      padding: 0;
+    }
+    
+    /* Legacy Substack cleanup */
+    .article-content .captioned-image-container figure::after,
+    .article-content .button-wrapper,
+    .article-content .subscription-widget-wrap-editor,
+    .article-content .pencraft,
+    .article-content .image-link-expand {
+      display: none !important;
+    }
+    
+    /* Simple footnote styles */
+    .article-content .footnote-number {
+      vertical-align: super;
+      font-size: 0.75em;
+      font-weight: 600;
+      color: var(--accent);
+      margin-left: 0.125rem;
+      user-select: none;
+      cursor: default;
+    }
+    
+    .article-content .footnotes-section {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+    }
+    
+    .article-content .footnotes-divider {
+      border: none;
+      border-top: 1px solid var(--audit);
+      margin: 0 0 1.5rem 0;
+    }
+    
+    .article-content .footnote {
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: #4b5563;
+    }
+    
+    .article-content .footnote-label {
+      font-weight: 600;
+      color: var(--accent);
+      margin-right: 0.5rem;
+    }
+    
+    .article-content .footnote-content {
+      display: inline;
+    }
+    
+    .article-content .footnote-content p {
+      display: inline;
+      margin: 0;
+    }
+    
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+      border-top-color: var(--accent);
+      animation: spin 0.8s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Page transitions */
+    #main-section, #archive-section {
+      transition: opacity 0.3s ease;
+    }
+    
+    /* Archive page button styling */
+    #back-to-main {
+      font-weight: 600;
+      background: white;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    #back-to-main:hover {
+      background: var(--accent);
+      color: white;
+    }
+    
+    #all-archive-posts {
+      min-height: 300px;
+    }
+    
+    #archive-stats {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    /* Hide archive elements in main view */
+    #archive-grid,
+    #archive-divider {
+      display: none !important;
+    }
+    
+    /* Section Divider */
+    .section-divider {
+      text-align: center;
+      margin: 2rem 0;
+      position: relative;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: calc(50% - 80px);
+      height: 1px;
+      background: var(--audit);
+    }
+    
+    .section-divider::before {
+      left: 0;
+    }
+    
+    .section-divider::after {
+      right: 0;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+  <!-- HERO -->
+  <section class="relative pt-28 pb-20 px-6 md:px-24 border-b border-dashed border-[var(--audit)] bg-gradient-to-br from-white via-[#fafafa] to-[#f6f6ff] overflow-hidden">
+    <div class="max-w-4xl mx-auto relative z-10">
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight font-mono title-hover">CHANGE LOG <span class="text-[var(--accent)]">// NASHVILLE</span></h1>
+      <p class="text-sm md:text-base mt-2 opacity-70 font-mono">Tracking What Changes — Since 2025</p>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed">We document institutional change — <span class="font-semibold">because the city forgets</span>.</p>
+      <p class="mt-4"><span class="stamp">UPDATE DEFERRED</span></p>
+    </div>
+    <div class="absolute inset-0 scanlines"></div>
+  </section>
+  
+  <!-- RECENT POSTS -->
+  <section id="main-section" class="recent-posts py-16 px-6 md:px-24">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
+        <h3 class="text-2xl font-semibold">Latest Updates</h3>
+        <div class="flex gap-2">
+          <!-- Test button for debugging - uncomment when needed
+          <button id="test-airtable" class="refresh-button" style="background: #f3e8ff; color: #6b21a8;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Test Airtable
+          </button>
+          -->
+          <button id="refresh-commits" class="refresh-button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+              <path d="M8 16H3v5"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+      
+      <!-- Featured Post -->
+      <div id="featured-post" class="mb-12">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p class="mt-3">Loading updates...</p>
+        </div>
+      </div>
+      
+      <!-- Grid of Posts -->
+      <div id="posts-grid" class="posts-grid mb-8"></div>
+      
+      <!-- Archive Section Divider -->
+      <div id="archive-divider" class="section-divider" style="display: none;">
+        Archived Posts
+      </div>
+      
+      <!-- Archive Posts Grid -->
+      <div id="archive-grid" class="posts-grid mb-8"></div>
+      
+      <!-- Load More -->
+      <div id="load-more-container" class="text-center mt-8">
+        <button id="load-more" class="load-more-button">
+          Load More Stories
+        </button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- ARCHIVE PAGE -->
+  <section id="archive-section" class="recent-posts py-16 px-6 md:px-24" style="display: none;">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
+        <div>
+          <h3 class="text-2xl font-semibold">Archive</h3>
+          <p class="text-sm text-gray-600 mt-1">Historical posts and documentation</p>
+        </div>
+        <button id="back-to-main" class="refresh-button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Latest
+        </button>
+      </div>
+      
+      <!-- Archive Stats -->
+      <div id="archive-stats" class="mb-8 p-4 bg-gray-50 rounded-lg text-sm text-gray-600"></div>
+      
+      <!-- All Archive Posts -->
+      <div id="all-archive-posts" class="posts-grid"></div>
+    </div>
+  </section>
+  
+  <!-- NEWSLETTER -->
+  <section id="newsletter-section" class="py-16 px-6 md:px-24 bg-gradient-to-b from-white to-[#f9fafb]">
+    <div class="max-w-3xl mx-auto bg-white/70 backdrop-blur-sm shadow-xl border border-[var(--audit)] rounded-2xl p-8">
+      <h2 class="text-2xl font-semibold mb-1">Stay Updated</h2>
+      <p class="text-sm mb-6 opacity-80">Get notified about changes, updates, and important civic issues.</p>
+      <form class="flex flex-col sm:flex-row gap-4">
+        <input type="email" placeholder="you@example.com" class="flex-1 border border-[var(--audit)] p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent)]" />
+        <button type="submit" class="bg-[var(--accent)] text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition">Subscribe</button>
+      </form>
+    </div>
+  </section>
+  
+  <!-- DOCUMENT CHANGES -->
+  <section id="document-section" class="px-6 md:px-24 py-20 border-y border-dashed border-[var(--audit)] bg-white">
+    <h3 class="font-semibold text-xl mb-8">Document Changes — Ordinance 98‑1037 <small class="text-sm opacity-60">Before & After</small></h3>
+    <div class="relative rounded-3xl shadow-2xl overflow-hidden bg-[#0e1119] ring-1 ring-black/5">
+      <div class="flex items-center gap-2 px-4 py-2 bg-[#161b22]">
+        <span class="w-3 h-3 rounded-full bg-red-400"></span><span class="w-3 h-3 rounded-full bg-amber-400"></span><span class="w-3 h-3 rounded-full bg-green-500"></span>
+        <span class="ml-4 text-xs font-mono text-white/60 tracking-wide">Document: Ordinance 98-1037</span>
+      </div>
+      <pre class="diff-code px-6 py-6 text-white/90 overflow-x-auto">
+<span class="diff-del">- The District Management Corporation <strong>shall</strong> submit its budget annually.</span>
+<span class="diff-add">+ The District Management Corporation <em>may</em> submit its budget at its discretion.</span>
+<span class="text-white/60">  Note: Section 4.3 revised July 2004 — no council record found.</span>
+      </pre>
+    </div>
+  </section>
+  
+  <!-- CURRENT ISSUES -->
+  <section id="issues-section" class="px-6 md:px-24 py-20 bg-gradient-to-b from-[#ffffff] via-[#fafafa] to-[#f5f5ff]">
+    <h3 class="text-xl font-semibold mb-8">Current Issues</h3>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div>
+        <h4 class="mb-3 font-medium">Active Issues</h4>
+        <div class="space-y-3">
+          <div class="bg-white border border-[var(--audit)] shadow-sm rounded-xl p-4 flex justify-between items-start hover:shadow-md transition"><span>Budgets missing 2005‑2024</span><span class="text-[var(--flag)] text-xs font-mono">17+ years</span></div>
+          <div class="bg-white border border-[var(--audit)] shadow-sm rounded-xl p-4 flex justify-between items-start hover:shadow-md transition"><span>Unauthorized parking‑garage demolition</span><span class="text-[var(--flag)] text-xs font-mono">147 days</span></div>
+        </div>
+      </div>
+      <div>
+        <h4 class="mb-3 font-medium">Under Review</h4>
+        <div class="space-y-3"><div class="bg-white border border-[var(--audit)] shadow-sm rounded-xl p-4 flex justify-between items-start hover:shadow-md transition"><span>Council audit motion BL2025‑846</span><span class="text-[var(--warn)] text-xs font-mono">pending vote</span></div></div>
+      </div>
+      <div>
+        <h4 class="mb-3 font-medium">Recently Resolved</h4>
+        <div class="space-y-3"><div class="bg-white border border-[var(--audit)] shadow-sm rounded-xl p-4 flex justify-between items-start hover:shadow-md transition"><span>FOIA backlog 2024</span><span class="text-[var(--mint)] text-xs font-mono">resolved</span></div></div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FOOTER -->
+  <footer class="mt-auto bg-[var(--ink)] text-white py-12 px-6 md:px-24 text-sm"><div class="flex flex-col sm:flex-row justify-between gap-4"><p>Documenting change, preserving accountability.</p><p>&copy; 2025 Change Log // Nashville — CC‑BY 4.0</p></div></footer>
+  
+  <!-- RSS Feed JavaScript -->
+  <script>
+    // ================================================
+    // Nashville Change Log - Integrated Feed Manager
+    // ================================================
+    // Configuration:
+    // 1. n8n webhook URL is already set
+    // 2. First 10 posts come from Airtable
+    // 3. After 10 posts, "View Archive" button appears
+    // 4. Archive page shows all Airtable posts
+    // 5. Test button commented out for production
+    // ================================================
+    
+    // Integrated Feed Manager - Airtable archive
+    class IntegratedFeedManager {
+      constructor() {
+        // Airtable webhook configuration
+        this.n8nWebhookUrl = 'https://n8n.intelechia.com/webhook/change-log';
+
+        this.refreshBtn = document.getElementById('refresh-commits');
+        this.loadMoreBtn = document.getElementById('load-more');
+        this.testAirtableBtn = document.getElementById('test-airtable');
+        this.backToMainBtn = document.getElementById('back-to-main');
+
+        // View state
+        this.currentView = 'main'; // 'main' or 'archive'
+
+        this.posts = [];
+        this.displayedPosts = 0;
+        this.postsPerLoad = 6;
+        this.maxDisplay = 10;
+
+        this.init();
+      }
+      
+      init() {
+        this.refreshBtn.addEventListener('click', () => this.fetchAllFeeds());
+        if (this.loadMoreBtn) {
+          this.loadMoreBtn.addEventListener('click', () => this.handleLoadMore());
+        }
+        if (this.testAirtableBtn) {
+          this.testAirtableBtn.addEventListener('click', () => this.testAirtableConnection());
+        }
+        if (this.backToMainBtn) {
+          this.backToMainBtn.addEventListener('click', () => this.showMainView());
+        }
+        this.fetchAllFeeds();
+      }
+      
+      handleLoadMore() {
+        if (this.displayedPosts >= Math.min(this.posts.length, this.maxDisplay)) {
+          this.showArchiveView();
+        } else {
+          this.loadMorePosts();
+        }
+      }
+      
+      showArchiveView() {
+        console.log('Switching to archive view');
+        this.currentView = 'archive';
+        
+        // Hide main sections
+        document.getElementById('main-section').style.display = 'none';
+        document.getElementById('newsletter-section').style.display = 'none';
+        document.getElementById('document-section').style.display = 'none';
+        document.getElementById('issues-section').style.display = 'none';
+        
+        // Show archive section
+        document.getElementById('archive-section').style.display = 'block';
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+        
+        // Update archive stats
+        const statsEl = document.getElementById('archive-stats');
+        if (statsEl) {
+          const totalPosts = this.posts.length;
+          const dateRange = this.getDateRange(this.posts);
+          statsEl.innerHTML = `
+            <strong>${totalPosts}</strong> archived posts
+            ${dateRange ? `<span class="mx-2">•</span> ${dateRange}` : ''}
+          `;
+        }
+        
+        // Display all archive posts with a brief loading state
+        const archiveContainer = document.getElementById('all-archive-posts');
+        archiveContainer.innerHTML = '<div class="loading-state"><div class="spinner"></div><p class="mt-3">Loading archive...</p></div>';
+        
+        // Use setTimeout to show loading state briefly
+        setTimeout(() => {
+          archiveContainer.innerHTML = '';
+
+          if (this.posts.length === 0) {
+            archiveContainer.innerHTML = '<p class="text-center text-gray-500 py-8">No archived posts available.</p>';
+          } else {
+            this.posts.forEach((post, index) => {
+              const card = this.createPostCard(post, index);
+              archiveContainer.appendChild(card);
+            });
+          }
+        }, 300);
+      }
+      
+      showMainView() {
+        console.log('Switching to main view');
+        this.currentView = 'main';
+        
+        // Show main sections
+        document.getElementById('main-section').style.display = 'block';
+        document.getElementById('newsletter-section').style.display = 'block';
+        document.getElementById('document-section').style.display = 'block';
+        document.getElementById('issues-section').style.display = 'block';
+        
+        // Hide archive section
+        document.getElementById('archive-section').style.display = 'none';
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+      }
+      
+      getDateRange(posts) {
+        if (!posts || posts.length === 0) return null;
+        
+        const dates = posts.map(p => new Date(p.pubDate)).filter(d => !isNaN(d));
+        if (dates.length === 0) return null;
+        
+        const oldest = new Date(Math.min(...dates));
+        const newest = new Date(Math.max(...dates));
+        
+        const formatDate = (date) => date.toLocaleDateString('en-US', { 
+          month: 'short', 
+          year: 'numeric' 
+        });
+        
+        if (oldest.getTime() === newest.getTime()) {
+          return formatDate(oldest);
+        }
+        
+        return `${formatDate(oldest)} — ${formatDate(newest)}`;
+      }
+      
+      async testAirtableConnection() {
+        console.log('Testing Airtable connection...');
+        
+        try {
+          const response = await fetch(this.n8nWebhookUrl);
+          const records = await response.json();
+          
+          if (Array.isArray(records) && records.length > 0) {
+            console.log(`Success! Found ${records.length} Airtable records`);
+            console.log('First record:', records[0]);
+            
+            // Transform records
+            const transformed = this.transformAirtableRecords(records);
+            
+            alert(`Success! Found ${transformed.length} Airtable records. Click "View Archive" after loading all recent posts to see them.`);
+            
+            // Update the stored posts
+            this.posts = transformed;
+            this.updateLoadMoreButton();
+          } else {
+            alert('Connection successful but no records found');
+          }
+        } catch (error) {
+          console.error('Test error:', error);
+          alert(`Error: ${error.message}`);
+        }
+      }
+      
+      async fetchAllFeeds() {
+        this.showLoading();
+        
+        try {
+          this.posts = await this.fetchAirtableRecords();
+          console.log(`Loaded ${this.posts.length} posts from Airtable`);
+          this.displayedPosts = 0;
+          this.renderInitialPosts();
+        } catch (error) {
+          console.error('Feed error:', error);
+          this.showError(error.message);
+        }
+      }
+
+      async fetchAirtableRecords() {
+        try {
+          const response = await fetch(this.n8nWebhookUrl);
+          if (!response.ok) {
+            throw new Error(`Webhook error: ${response.status}`);
+          }
+          const data = await response.json();
+          return this.transformAirtableRecords(data);
+        } catch (error) {
+          console.error('Error fetching from Airtable:', error);
+          return [];
+        }
+      }
+      
+      transformAirtableRecords(records) {
+        // Records are already an array
+        if (!Array.isArray(records)) {
+          console.warn('Expected array from Airtable, got:', typeof records);
+          return [];
+        }
+        
+        console.log(`Transforming ${records.length} Airtable records`);
+        
+        return records.map((record, index) => {
+          // Map Airtable field names to expected format
+          const transformed = {
+            id: record.id || Math.random().toString(36).substr(2, 9),
+            title: record.Title || record.Notes || 'Untitled',
+            content: record.Excerpt || '',
+            description: record.Excerpt || '',
+            pubDate: record['ISO Date'] || record['Display Date'] || new Date().toISOString(),
+            author: record.Authors || 'Staff',
+            link: record.URL || '#',
+            categories: [],
+            source: 'airtable',
+            thumbnail: record['Preview Image URL'] || null
+          };
+          
+          if (index === 0) {
+            console.log('First record transformed:', transformed);
+          }
+          
+          return transformed;
+        });
+      }
+      
+      showLoading() {
+        document.getElementById('featured-post').innerHTML = `
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p class="mt-3">Loading updates from archive...</p>
+          </div>
+        `;
+        document.getElementById('posts-grid').innerHTML = '';
+      }
+      
+      showError(message) {
+        document.getElementById('featured-post').innerHTML = `
+          <div class="error-state">
+            <p>⚠ ${message}</p>
+            <small>Please try refreshing the page</small>
+          </div>
+        `;
+      }
+      
+      renderInitialPosts() {
+        if (this.posts.length === 0) return;
+
+        this.renderFeaturedPost(this.posts[0]);
+        this.displayedPosts = 1;
+
+        // Clear grid before rendering
+        document.getElementById('posts-grid').innerHTML = '';
+
+        // Hide archive elements in main view
+        document.getElementById('archive-grid').style.display = 'none';
+        document.getElementById('archive-divider').style.display = 'none';
+
+        this.renderNextBatch();
+      }
+
+      renderNextBatch() {
+        const gridContainer = document.getElementById('posts-grid');
+
+        let remainingSlots = this.postsPerLoad;
+
+        const available = this.posts.slice(
+          this.displayedPosts,
+          Math.min(this.displayedPosts + remainingSlots, this.maxDisplay, this.posts.length)
+        );
+
+        available.forEach((post, index) => {
+          const card = this.createPostCard(post, index);
+          gridContainer.appendChild(card);
+        });
+
+        this.displayedPosts += available.length;
+        this.updateLoadMoreButton();
+      }
+
+      loadMorePosts() {
+        const btn = document.getElementById('load-more');
+        btn.classList.add('loading');
+        btn.disabled = true;
+
+        setTimeout(() => {
+          this.renderNextBatch();
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }, 300);
+      }
+
+      updateLoadMoreButton() {
+        const btn = document.getElementById('load-more');
+        const container = document.getElementById('load-more-container');
+
+        const maxToShow = Math.min(this.posts.length, this.maxDisplay);
+
+        if (this.displayedPosts >= maxToShow) {
+          if (this.posts.length > this.maxDisplay) {
+            container.style.display = 'block';
+            btn.innerHTML = `
+              View Archive
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            `;
+            btn.style.display = 'inline-flex';
+            btn.style.alignItems = 'center';
+          } else {
+            container.innerHTML = `
+              <p class="text-sm text-gray-500 font-medium">
+                You've reached the end • ${this.displayedPosts} posts loaded
+              </p>
+            `;
+          }
+        } else {
+          container.style.display = 'block';
+          const remaining = maxToShow - this.displayedPosts;
+          btn.textContent = `Load More Stories (${remaining} remaining)`;
+          btn.style.display = 'inline-block';
+        }
+      }
+      
+      renderFeaturedPost(item) {
+        const keywords = this.extractKeywords(item);
+        const imageUrl = item.thumbnail || this.getImageFromContent(item.content || item.description);
+        const excerpt = this.getExcerpt(item.description || item.content || '', 150);
+        
+        const featured = document.getElementById('featured-post');
+        featured.innerHTML = `
+          <div class="featured-post">
+            <div class="featured-content">
+              ${keywords.length > 0 ? `<div class="featured-tag">${keywords[0]}</div>` : ''}
+              <h2 class="featured-title">${this.escapeHtml(item.title)}</h2>
+              ${excerpt ? `<p class="featured-excerpt">${excerpt}</p>` : ''}
+              <div class="featured-meta">
+                ${item.author || 'Staff'} • ${this.formatDate(item.pubDate)}
+                <span class="source-badge ${item.source}">${item.source}</span>
+              </div>
+            </div>
+            ${imageUrl ? 
+              `<img class="featured-image" src="${imageUrl}" alt="${this.escapeHtml(item.title)}">` : 
+              `<div class="featured-image placeholder">📄</div>`
+            }
+          </div>
+        `;
+        
+        featured.querySelector('.featured-post').addEventListener('click', () => this.openPost(item));
+      }
+      
+      createPostCard(item, index) {
+        const card = document.createElement('div');
+        const keywords = this.extractKeywords(item);
+        const imageUrl = item.thumbnail || this.getImageFromContent(item.content || item.description);
+        const excerpt = this.getExcerpt(item.description || item.content || '', 100);
+        
+        const sizeClasses = ['', 'large', '', 'tall', '', ''];
+        const sizeClass = window.innerWidth > 1024 ? sizeClasses[index % sizeClasses.length] : '';
+        const hasImage = imageUrl && (index % 3 === 0);
+        
+        card.className = `post-card ${sizeClass} ${hasImage ? 'with-image' : ''}`;
+        card.style.animationDelay = `${0.1 + (index % 6) * 0.05}s`;
+        
+        card.innerHTML = `
+          ${hasImage ? `<img class="post-card-image" src="${imageUrl}" alt="${this.escapeHtml(item.title)}">` : ''}
+          <div class="post-card-content">
+            ${keywords.length > 0 ? `
+              <div class="post-tags">
+                ${keywords.map(k => `<span class="post-tag">${k}</span>`).join('')}
+              </div>
+            ` : ''}
+            <h3 class="post-title">${this.escapeHtml(item.title)}</h3>
+            ${sizeClass ? `<p class="post-excerpt">${excerpt}</p>` : ''}
+            <div class="post-meta">
+              ${this.formatDate(item.pubDate)}
+              <span class="source-badge ${item.source}">${item.source}</span>
+            </div>
+          </div>
+        `;
+        
+        card.addEventListener('click', () => this.openPost(item));
+        return card;
+      }
+      
+      openPost(item) {
+        document.body.style.overflow = 'hidden';
+        
+        const backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+        
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        
+        const processedContent = item.content || item.description;
+        
+        modal.innerHTML = `
+          <div class="modal-header">
+            <h2 class="modal-title">${this.escapeHtml(item.title)}</h2>
+            <div class="modal-controls">
+              <button class="modal-btn expand" aria-label="Expand" title="Fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+              </button>
+              <button class="modal-btn minimize" aria-label="Exit fullscreen" title="Exit fullscreen" style="display:none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+                </svg>
+              </button>
+              <button class="modal-close" aria-label="Close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="modal-content">
+            <div class="article-content">${DOMPurify.sanitize(processedContent)}</div>
+          </div>
+          <div class="modal-footer">
+            <span class="modal-meta">
+              ${item.author || 'Staff'} • ${new Date(item.pubDate).toLocaleDateString()}
+              <span class="source-badge ${item.source}">${item.source}</span>
+            </span>
+            ${item.link && item.link !== '#' ?
+              `<a href="${item.link}" target="_blank" class="modal-link">
+                Read original →
+              </a>` : ''}
+          </div>
+        `;
+        
+        const closeModal = () => {
+          backdrop.remove();
+          document.body.style.overflow = '';
+          document.removeEventListener('keydown', keyHandler);
+        };
+        
+        const toggleFullscreen = () => {
+          modal.classList.toggle('fullscreen');
+          const expandBtn = modal.querySelector('.expand');
+          const minimizeBtn = modal.querySelector('.minimize');
+          
+          if (modal.classList.contains('fullscreen')) {
+            expandBtn.style.display = 'none';
+            minimizeBtn.style.display = 'flex';
+          } else {
+            expandBtn.style.display = 'flex';
+            minimizeBtn.style.display = 'none';
+          }
+        };
+        
+        const keyHandler = (e) => {
+          if (e.key === 'Escape') closeModal();
+          if (e.key === 'f' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            toggleFullscreen();
+          }
+        };
+        
+        modal.querySelector('.modal-close').addEventListener('click', closeModal);
+        modal.querySelector('.expand').addEventListener('click', toggleFullscreen);
+        modal.querySelector('.minimize').addEventListener('click', toggleFullscreen);
+        backdrop.addEventListener('click', (e) => {
+          if (e.target === backdrop) closeModal();
+        });
+        
+        document.addEventListener('keydown', keyHandler);
+        
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+      }
+      
+      extractKeywords(item) {
+        const categories = item.categories || [];
+        const civicKeywords = [
+          'council', 'budget', 'metro', 'audit', 'ordinance', 'development',
+          'housing', 'transit', 'police', 'education', 'infrastructure',
+          'downtown', 'homeless', 'affordability', 'transparency'
+        ];
+        
+        const text = (item.title + ' ' + (item.description || '')).toLowerCase();
+        const foundKeywords = civicKeywords.filter(keyword => text.includes(keyword));
+        const allKeywords = [...new Set([...categories, ...foundKeywords])];
+        
+        return allKeywords.slice(0, 3);
+      }
+      
+      getImageFromContent(content) {
+        if (!content) return null;
+        const temp = document.createElement('div');
+        temp.innerHTML = content;
+        const img = temp.querySelector('img');
+        
+        if (img && img.src) {
+          try {
+            new URL(img.src);
+            return img.src;
+          } catch (e) {
+            return null;
+          }
+        }
+        
+        return null;
+      }
+      
+      getExcerpt(html, length) {
+        const temp = document.createElement('div');
+        temp.innerHTML = html;
+        const text = temp.textContent || temp.innerText || '';
+        const cleaned = text.replace(/\s+/g, ' ').trim();
+        return cleaned.length > length ? cleaned.substring(0, length) + '...' : cleaned;
+      }
+      
+      formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays < 1) return 'Today';
+        if (diffDays === 1) return 'Yesterday';
+        if (diffDays < 7) return `${diffDays} days ago`;
+        
+        return date.toLocaleDateString('en-US', { 
+          month: 'short',
+          day: 'numeric',
+          year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+        });
+      }
+      
+      escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      new IntegratedFeedManager();
+    });
+  </script>
+</body>
+</html>
