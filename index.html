@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Log // Nashville</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Demo banner -->
+    <div class="demo-banner" onclick="openAboutModal()">
+        🚧 This is a demo of Change Log // Nashville. <span>Click here to learn more</span> →
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">CHANGE LOG <span class="logo-slash">//</span> NASHVILLE</div>
+            <div class="nav-actions">
+                <button class="add-btn">+ Share Update</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Welcoming intro -->
+    <section class="intro">
+        <h1>Your City, Your Voice</h1>
+        <p>Stay connected with what's happening in Nashville. Track proposals, join discussions, and see how your community is evolving.</p>
+    </section>
+
+    <!-- Content type tabs -->
+    <div class="content-types">
+        <button class="type-tab active" data-filter="all">
+            <span class="type-icon">📊</span>
+            All Updates
+            <span class="type-count">234</span>
+        </button>
+        <button class="type-tab" data-filter="legislation">
+            <span class="type-icon">📜</span>
+            Legislation
+            <span class="type-count">47</span>
+        </button>
+        <button class="type-tab" data-filter="discussion">
+            <span class="type-icon">💬</span>
+            Discussions
+            <span class="type-count">156</span>
+        </button>
+        <button class="type-tab" data-filter="news">
+            <span class="type-icon">📰</span>
+            News
+            <span class="type-count">31</span>
+        </button>
+    </div>
+
+    <!-- Theme filters -->
+    <div class="theme-filters">
+        <span class="theme-label">Filter by theme:</span>
+        <button class="theme-pill active" data-theme="all">
+            <span class="theme-dot" style="background: var(--text-tertiary);"></span>
+            All Themes
+        </button>
+        <button class="theme-pill" data-theme="1">
+            <span class="theme-dot" style="background: var(--theme-1);"></span>
+            Governing without Coercion
+        </button>
+        <button class="theme-pill" data-theme="2">
+            <span class="theme-dot" style="background: var(--theme-2);"></span>
+            Feedback & Truth-Telling
+        </button>
+        <button class="theme-pill" data-theme="3">
+            <span class="theme-dot" style="background: var(--theme-3);"></span>
+            Beyond Binaries
+        </button>
+        <button class="theme-pill" data-theme="4">
+            <span class="theme-dot" style="background: var(--theme-4);"></span>
+            Contextual Leadership
+        </button>
+        <button class="theme-pill" data-theme="5">
+            <span class="theme-dot" style="background: var(--theme-5);"></span>
+            Ritual & Myth
+        </button>
+        <button class="theme-pill" data-theme="6">
+            <span class="theme-dot" style="background: var(--theme-6);"></span>
+            Power & Resources
+        </button>
+        <button class="theme-pill" data-theme="7">
+            <span class="theme-dot" style="background: var(--theme-7);"></span>
+            Planetary Care
+        </button>
+    </div>
+
+    <!-- Main content -->
+    <main class="main-content">
+        <div class="card-grid">
+            <!-- Featured card -->
+            <article class="card featured-card" data-type="discussion" data-themes="1,6">
+                <div class="card-type-bar"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <span class="card-type-label">
+                            <span>💬</span>
+                            Active Discussion
+                        </span>
+                    </div>
+                    <div class="theme-tags">
+                        <span class="theme-tag" data-theme="1">Governing without Coercion</span>
+                        <span class="theme-tag" data-theme="6">Power & Resources</span>
+                    </div>
+                    <h2 class="card-title">How Zoning Laws Shape Who Belongs in Nashville</h2>
+                    <p class="card-excerpt">
+                        As Metro Council prepares to vote on sweeping zoning changes, join the conversation about 
+                        balancing growth with community preservation.
+                    </p>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <span>🔥 2.3k</span>
+                            <span>💬 342</span>
+                            <span>📎 5 related</span>
+                        </div>
+                        <span>Updated today</span>
+                    </div>
+                </div>
+                <div class="featured-visual"></div>
+            </article>
+
+            <!-- Legislation card -->
+            <article class="card" data-type="legislation" data-themes="1,6">
+                <div class="card-type-bar"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <span class="card-type-label">
+                            <span>📜</span>
+                            Legislation
+                        </span>
+                        <span style="background: rgba(243, 156, 18, 0.1); color: #f39c12; padding: 0.25rem 0.625rem; border-radius: 12px; font-size: 0.75rem;">Modified</span>
+                    </div>
+                    <h3 class="card-title">Affordable Housing Trust Fund Restructuring Act</h3>
+                    <div class="theme-tags">
+                        <span class="theme-tag" data-theme="1">Governing without Coercion</span>
+                        <span class="theme-tag" data-theme="6">Power & Resources</span>
+                    </div>
+                    <p class="card-excerpt">
+                        Proposed changes would shift 80% of funds to community land trusts with resident oversight.
+                    </p>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <span>👥 89 following</span>
+                            <span>📋 Track</span>
+                        </div>
+                        <span>2 days ago</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- News card -->
+            <article class="card" data-type="news" data-themes="2,6">
+                <div class="card-type-bar"></div>
+                <div class="visual-placeholder gradient-2"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <span class="card-type-label">
+                            <span>📰</span>
+                            News
+                        </span>
+                    </div>
+                    <h3 class="card-title">Audit Reveals $45M in Unallocated Metro Funds</h3>
+                    <div class="theme-tags">
+                        <span class="theme-tag" data-theme="2">Feedback & Truth-Telling</span>
+                        <span class="theme-tag" data-theme="6">Power & Resources</span>
+                    </div>
+                    <p class="card-excerpt">
+                        Independent investigation uncovers budget discrepancies while council claims crisis.
+                    </p>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <span>🔥 1.2k</span>
+                            <span>💬 203</span>
+                        </div>
+                        <span>Today</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Discussion card -->
+            <article class="card" data-type="discussion" data-themes="3">
+                <div class="card-type-bar"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <span class="card-type-label">
+                            <span>💬</span>
+                            Discussion
+                        </span>
+                    </div>
+                    <h3 class="card-title">Alternative Transit Ideas Beyond All-or-Nothing</h3>
+                    <div class="theme-tags">
+                        <span class="theme-tag" data-theme="3">Beyond Binaries</span>
+                    </div>
+                    <p class="card-excerpt">
+                        What if we implemented transit in phases, starting with neighborhoods that need it most?
+                    </p>
+                    <div class="visual-placeholder gradient-3" style="height: 120px;"></div>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <span>👍 234</span>
+                            <span>💬 89</span>
+                        </div>
+                        <span>2 hours ago</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Environmental legislation -->
+            <article class="card" data-type="legislation" data-themes="7">
+                <div class="card-type-bar"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <span class="card-type-label">
+                            <span>📜</span>
+                            Legislation
+                        </span>
+                        <span style="background: rgba(74, 144, 226, 0.1); color: #4a90e2; padding: 0.25rem 0.625rem; border-radius: 12px; font-size: 0.75rem;">Pending Vote</span>
+                    </div>
+                    <h3 class="card-title">Urban Tree Canopy Protection Act</h3>
+                    <div class="theme-tags">
+                        <span class="theme-tag" data-theme="7">Planetary Care</span>
+                    </div>
+                    <p class="card-excerpt">
+                        Requires developers to replace every tree removed with 3 new trees or contribute to urban forest fund.
+                    </p>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <span>🌳 1.1k support</span>
+                            <span>📋 Track</span>
+                        </div>
+                        <span>Vote Nov 15</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Community story -->
+            <article class="card" data-type="discussion" data-themes="5">
+                <div class="card-type-bar"></div>
+                <div class="visual-placeholder gradient-5"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <span class="card-type-label">
+                            <span>💬</span>
+                            Community Story
+                        </span>
+                    </div>
+                    <h3 class="card-title">The Buchanan Street Mural: Preserving Our History</h3>
+                    <div class="theme-tags">
+                        <span class="theme-tag" data-theme="5">Ritual & Myth</span>
+                    </div>
+                    <p class="card-excerpt">
+                        For 40 years, this mural has told our neighborhood's story. Now the community organizes to save it.
+                    </p>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <span>❤️ 567</span>
+                            <span>💬 78</span>
+                        </div>
+                        <span>3 days ago</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Regular Modal -->
+    <div class="modal-backdrop" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-header-content">
+                    <span class="card-type-label" id="modal-type">
+                        <span>💬</span>
+                        Discussion
+                    </span>
+                    <div class="theme-tags" id="modal-themes" style="margin: 1rem 0;">
+                        <!-- Theme tags will be inserted here -->
+                    </div>
+                    <h2 id="modal-title" style="margin-right: 2rem;">Title</h2>
+                    <div class="modal-meta">
+                        <span id="modal-author">Posted by @user</span>
+                        <span id="modal-date">2 days ago</span>
+                        <span id="modal-stats">🔥 234 • 💬 45</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="expand-btn" onclick="expandToFullPage()">
+                        <span>⤢</span>
+                        Full View
+                    </button>
+                </div>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-content">
+                <div id="modal-body">
+                    <p>Full content will appear here...</p>
+                </div>
+                
+                <div id="modal-relations" style="display: none;">
+                    <!-- Relational content will be inserted here for legislation -->
+                </div>
+                
+                <div class="discussion-thread">
+                    <h3 style="margin-bottom: 1rem;">Discussion</h3>
+                    
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">@sarah_martinez</span>
+                            <span class="comment-time">2 hours ago</span>
+                        </div>
+                        <p>This is exactly the kind of community-led governance we need. The land trust model has proven successful in other cities.</p>
+                    </div>
+                    
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">@district5_resident</span>
+                            <span class="comment-time">1 hour ago</span>
+                        </div>
+                        <p>I attended the committee meeting. We need everyone to show up next Tuesday for the final vote.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal-backdrop about-modal" id="about-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-header-content">
+                    <!-- Empty to maintain layout -->
+                </div>
+                <button class="close-btn" onclick="closeAboutModal()">×</button>
+            </div>
+            <div class="modal-content">
+                <h2>What You're Looking At</h2>
+                <p>This is a working prototype of <strong>Change Log // Nashville</strong>—a civic platform designed to make decisions visible, patterns trackable, and public participation possible. It's a living, open-source tool built for the people who are most affected by public policy but often last to be informed or consulted.</p>
+                
+                <p>Here's what you'll find:</p>
+                <ul>
+                    <li><strong>Legislation tracking</strong>, with accessible summaries of what's being proposed, passed, or postponed</li>
+                    <li><strong>Metro spending and contracts</strong>, showing where local funds go and who benefits</li>
+                    <li><strong>Contextual issue threads</strong>, to help tie together decisions across time, agencies, and neighborhoods</li>
+                    <li><strong>Discussion tools</strong>, so informed public input doesn't just live in group chats or vanish after 20 minutes of council comment</li>
+                </ul>
+                
+                <p>This isn't a dashboard for policy wonks. It's a prototype for civic infrastructure we can actually use.</p>
+                
+                <h3>Why This Exists</h3>
+                <p>The decisions shaping Nashville are technically public—but scattered, fragmented, and often impossible to follow unless you already know where to look. Meeting minutes are delayed, spending reports are buried in PDFs, and legislative text is rarely written for non-lawyers.</p>
+                
+                <p>Neighborhood conversations are happening—but they're happening in private Signal chats, Facebook threads, and hallway sidebars, not in any shared public record. That means we lose civic memory. We repeat fights. We miss the patterns.</p>
+                
+                <p><strong>Change Log // Nashville</strong> exists to:</p>
+                <ul>
+                    <li>Track decisions while they're unfolding</li>
+                    <li>Make power legible—where it flows, how it's used, and who it impacts</li>
+                    <li>Connect local knowledge and public data in one place</li>
+                </ul>
+                
+                <p>We need infrastructure that can hold complexity and invite feedback. This is our first attempt.</p>
+                
+                <h3>What's Happening Behind the Scenes</h3>
+                <p>This prototype pulls real data from Metro Nashville sources—legislation, budgets, contracts—and organizes it in a way designed for use, not obfuscation. The design is grounded in systems thinking, not party politics.</p>
+                
+                <p>We're building around a set of themes that we believe help societies thrive:</p>
+                <ul>
+                    <li><strong>Governing Without Coercion</strong></li>
+                    <li><strong>Feedback & Truth-Telling</strong></li>
+                    <li><strong>Decision-Making Beyond Binaries</strong></li>
+                    <li><strong>Contextual Leadership</strong></li>
+                    <li><strong>Ritual, Myth & Meaning</strong></li>
+                    <li><strong>Circulation of Power & Resources</strong></li>
+                    <li><strong>Structural & Planetary Care</strong></li>
+                </ul>
+                
+                <p>These themes shape how we tag, explain, and connect the pieces.</p>
+                
+                <h3>What's Next?</h3>
+                <p>This is an early build. With support, we can:</p>
+                <ul>
+                    <li>Expand coverage beyond Metro Council to include planning, schools, and more</li>
+                    <li>Add search and sort tools to track issues over time</li>
+                    <li>Build participatory feedback tools for neighborhood groups, organizers, and researchers</li>
+                </ul>
+                
+                <p>This is powered by volunteers and small donations right now. If you want to help, you can:</p>
+                <ul>
+                    <li>Support with a one-time or recurring donation</li>
+                    <li>Offer research, tech, or editorial time</li>
+                    <li>Share feedback or help us test the tool</li>
+                </ul>
+                
+                <p>We're building this because we needed it and no one else was. If you feel the same, we'd love to build it with you.</p>
+                
+                <div class="cta-section">
+                    <h3>Get Involved</h3>
+                    <p>Join the conversation and help build civic infrastructure that works for everyone.</p>
+                    <div class="cta-buttons">
+                        <a href="https://prometheoid.substack.com/" target="_blank" class="cta-btn cta-btn-primary">
+                            📧 Subscribe for Updates
+                        </a>
+                        <a href="https://venmo.com/u/MikeLacy216" target="_blank" class="cta-btn cta-btn-secondary">
+                            💚 Support on Venmo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
