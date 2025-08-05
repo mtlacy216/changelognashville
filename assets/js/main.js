@@ -861,40 +861,37 @@
         }
 
         async function fetchLegistarMatters() {
-            const list = document.getElementById('legislation-list');
-            if (!list) return;
+    const list = document.getElementById('legislation-list');
+    if (!list) return;
 
-            // Ask for the latest 12 matters ordered by agenda date
-            const params = new URLSearchParams({
-                '$top': '12',
-                '$orderby': 'MatterAgendaDate desc'
-            });
-            const url = `https://webapi.legistar.com/v1/nashville/Matters?${params}`;
+    // Ask for the latest 12 matters ordered by agenda date
+    const params = new URLSearchParams({
+        '$top': '12',
+        '$orderby': 'MatterAgendaDate desc'
+    });
+    const url = `https://webapi.legistar.com/v1/nashville/Matters?${params}`;
 
-            try {
-                const res = await fetch(url);
-                if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-                const matters = await res.json();
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+        const matters = await res.json();
 
-                if (!matters.length) {
-                    list.innerHTML = '<li>No legislation found.</li>';
-                    return;
-                }
-
-                list.innerHTML = '';
-                matters.forEach(m => {
-                    const item = document.createElement('li');
-                    const date = m.MatterAgendaDate ?
-                        new Date(m.MatterAgendaDate).toLocaleDateString('en-US', { dateStyle: 'medium' }) : '';
-                    const title = m.MatterName || m.MatterTitle || 'Untitled';
-                    item.textContent = `${date} — ${title}`;
-                    list.appendChild(item);
-                });
-            } catch (err) {
-                console.warn('Failed to fetch legislation', err);
-                list.innerHTML = '<li class="error">Unable to load legislation.</li>';
-            }
+        if (!matters.length) {
+            list.innerHTML = '<li>No legislation found.</li>';
+            return;
         }
 
-        fetchLegistarEvents();
-        fetchLegistarMatters();
+        list.innerHTML = '';
+        matters.forEach(m => {
+            const item = document.createElement('li');
+            const date = m.MatterAgendaDate ?
+                new Date(m.MatterAgendaDate).toLocaleDateString('en-US', { dateStyle: 'medium' }) : '';
+            const title = m.MatterName || m.MatterTitle || 'Untitled';
+            item.textContent = `${date} — ${title}`;
+            list.appendChild(item);
+        });
+    } catch (err) {
+        console.warn('Failed to fetch legislation', err);
+        list.innerHTML = '<li class="error">Unable to load legislation.</li>';
+    }
+}
