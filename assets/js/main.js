@@ -823,28 +823,84 @@
             const list = document.getElementById('events-list');
             if (!list) return;
 
-            try {
-                const res = await fetch('https://webapi.legistar.com/v1/nashville/Events?$top=20&$orderby=EventDate');
-                const events = await res.json();
-                const upcoming = events
-                    .filter(ev => new Date(ev.EventDate) >= new Date())
-                    .slice(0, 5);
+            const base = 'https://webapi.legistar.com/v1/nashville/Events?$top=20&$orderby=EventDate&$format=json';
+            const sources = [
+                base,
+                `https://corsproxy.io/?${encodeURIComponent(base)}`,
+                `https://cors.isomorphic-git.org/${base}`,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(base)}`
+            ];
 
-                if (upcoming.length === 0) {
-                    list.innerHTML = '<li>No upcoming events found.</li>';
-                    return;
+            for (const url of sources) {
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) continue;
+                    const events = await res.json();
+                    const upcoming = events
+                        .filter(ev => new Date(ev.EventDate) >= new Date())
+                        .slice(0, 6);
+
+                    if (upcoming.length === 0) {
+                        list.innerHTML = '<li>No upcoming events found.</li>';
+                        return;
+                    }
+
+                    list.innerHTML = '';
+                    upcoming.forEach(ev => {
+                        const item = document.createElement('li');
+                        const date = new Date(ev.EventDate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+                        item.textContent = `${date} — ${ev.EventBodyName}`;
+                        list.appendChild(item);
+                    });
+                    return; // Successfully loaded events
+                } catch (err) {
+                    console.warn('Failed to fetch events from', url, err);
                 }
-
-                upcoming.forEach(ev => {
-                    const item = document.createElement('li');
-                    const date = new Date(ev.EventDate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
-                    item.textContent = `${date} — ${ev.EventBodyName}`;
-                    list.appendChild(item);
-                });
-            } catch (err) {
-                list.innerHTML = '<li class="error">Unable to load events.</li>';
-                console.error('Error fetching events:', err);
             }
+
+            list.innerHTML = '<li class="error">Unable to load events.</li>';
+        }
+
+        async function fetchLegistarMatters() {
+            const list = document.getElementById('legislation-list');
+            if (!list) return;
+
+            const base = 'https://webapi.legistar.com/v1/nashville/Matters?$top=12&$orderby=MatterAgendaDate%20desc&$format=json';
+            const sources = [
+                base,
+                `https://corsproxy.io/?${encodeURIComponent(base)}`,
+                `https://cors.isomorphic-git.org/${base}`,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(base)}`
+            ];
+
+            for (const url of sources) {
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) continue;
+                    const matters = await res.json();
+
+                    if (!Array.isArray(matters) || matters.length === 0) {
+                        list.innerHTML = '<li>No legislation found.</li>';
+                        return;
+                    }
+
+                    list.innerHTML = '';
+                    matters.forEach(m => {
+                        const item = document.createElement('li');
+                        const date = m.MatterAgendaDate ?
+                            new Date(m.MatterAgendaDate).toLocaleDateString('en-US', { dateStyle: 'medium' }) : '';
+                        const title = m.MatterName || m.MatterTitle || 'Untitled';
+                        item.textContent = `${date} — ${title}`;
+                        list.appendChild(item);
+                    });
+                    return; // Successfully loaded legislation
+                } catch (err) {
+                    console.warn('Failed to fetch legislation from', url, err);
+                }
+            }
+
+            list.innerHTML = '<li class="error">Unable to load legislation.</li>';
         }
 
         fetchLegistarEvents();
+        fetchLegistarMatters();
